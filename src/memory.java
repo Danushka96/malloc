@@ -19,7 +19,7 @@ import java.util.ArrayList;
  *          * addSegment() - used to add a new memory segment to the RAM (add a new node to the linked list)
  *          * release() - used to release a memory segment from the RAM ( remove a node from the linked list)
  *          * printMemory() - used to print the memory segments in the ram in a better way :D
- *      >> For more details see the comments in the each function
+ *  For more details see the comments in the each function
  */
 
 
@@ -27,11 +27,19 @@ class segment{
     private char type; // hole or a process ('H','P')
     private int start_at,end_at; // memory location status
     private segment next; // points to the next node
+    private int nodeSize;
     segment(char type, int start_at, int end_at){
         this.type = type;
         this.start_at = start_at;
         this.end_at = end_at;
         this.next = null;
+        this.nodeSize = 14;
+        /*
+        type        (char)  - 2 bytes
+        start_at    (int)   - 4 bytes
+        end_at      (int)   - 4 bytes
+        size        (int)   - 4 bytes
+         */
     }
     //Setters
     void setNext(segment next) { this.next = next; }
@@ -120,6 +128,7 @@ class memory {
      */
 
     int addSegment(int size){
+        size += 14; //Add the size of the node
         int freeArrayIndex = this.findBestFit(size);
         if(freeArrayIndex==-1){
             System.out.println("No space Available in the RAM!");
@@ -147,6 +156,7 @@ class memory {
                 segment temp = BFS.getNext();
                 BFS.setNext(newSegment);
                 newSegment.setNext(temp);
+//                System.out.println(ObjectSizeFetcher.getObjectSize(newSegment));
                 return newSegment.getStart_at(); //returns the base address of the segment
             }
         }
